@@ -1,0 +1,3 @@
+Eastern United States,Western United States
+Eastern United States,Central America
+Western United States,Central America
