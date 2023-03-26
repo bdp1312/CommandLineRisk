@@ -147,11 +147,13 @@ void populateMapVertices(Map *myMap, char *fileName)
     char pro1Name[128];
     int startPos;
     int endPos;
-    Province *pro1=NULL;
-    Province *pro0=NULL;
+    Province *pro1;
+    Province *pro0;
 
     FILE *f = fopen(fileName, "r");        
     while(fgets(buffer, 256, f)!=NULL){
+        pro0=NULL;
+        pro1=NULL;
         //can be refactored into function???
         //tokenize stirng by comma
         endPos=0;
