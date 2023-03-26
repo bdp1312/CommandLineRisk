@@ -10,6 +10,7 @@ typedef struct Province {
     char* name;
     int armies;
     Continent *continent;
+    int numBorders;
     struct Province *borders [8]; 
 } Province;
 

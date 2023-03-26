@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Map.h"
 
+//test code for board creation
 int main(void) {
 /*
     Province eastUS;
@@ -17,7 +18,7 @@ int main(void) {
     printProvince(&eastUS);
 */
     Map* testMap = readMapFromTxt("MapFiles/Map0Node.txt");
-    for(int i =0;i<testMap->numPros; ++i){printProvince(testMap->provinces[i]);}
     populateMapVertices(testMap, "MapFiles/Map0Vertex.txt");
+    for(int i =0;i<testMap->numPros; ++i){printProvince(testMap->provinces[i]);}
     return 0;
 }

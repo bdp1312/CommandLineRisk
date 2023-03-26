@@ -9,7 +9,7 @@ void printProvince(Province *pro)
     printf("name:  %s\narmies: %d\nprovince=%s\n", pro->name, pro->armies, pro->continent->name);
     for(int i=0; i<8; ++i){
         if (pro->borders[i]!=NULL){
-            printf("border[%d]=%s\n", i, pro->borders[i]);
+            printf("border[%d]=%s\n", i, pro->borders[i]->name);
         }
     }
 }
@@ -41,6 +41,9 @@ Continent *makeContinent(char *inStr)
 Province *makeProvince(char *nameStr, Continent *con)
 {
     Province *myProvince= (Province *)malloc(sizeof(Province));
+    //set numBorders to 0
+    myProvince->numBorders=0;
+    //initialize nameLen, set to 0
     int nameLen=0;
     for(int i=0;nameStr[i]!='\n';++i)
     {
@@ -144,6 +147,8 @@ void populateMapVertices(Map *myMap, char *fileName)
     char pro1Name[128];
     int startPos;
     int endPos;
+    Province *pro1=NULL;
+    Province *pro0=NULL;
 
     FILE *f = fopen(fileName, "r");        
     while(fgets(buffer, 256, f)!=NULL){
@@ -160,7 +165,24 @@ void populateMapVertices(Map *myMap, char *fileName)
         for(int i=0;i<endPos-startPos;++i){
             pro1Name[i]=buffer[startPos+i];    
         }
-    printf("%s, %s\n",pro1Name, pro1Name);
+//    printf("%s, %s\n",pro1Name, pro1Name);
+        //find names in myMap->provinces
+        for(int i=0; i<myMap->numPros;++i){
+            if(strcmp(myMap->provinces[i]->name, pro0Name)==0){
+                pro0=myMap->provinces[i]; 
+            }
+            if(strcmp(myMap->provinces[i]->name, pro1Name)==0){
+                pro1=myMap->provinces[i];  
+            }
+            //if both provinces found add each other to thier borders
+            if(pro1!=NULL && pro0!=NULL){
+               pro0->borders[pro0->numBorders]=pro1;
+               ++(pro0->numBorders);
+               pro1->borders[pro1->numBorders]=pro0;
+               ++(pro1->numBorders);
+               break;
+            }
+        }
     }
     fclose(f);
     return;
