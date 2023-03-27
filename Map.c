@@ -4,9 +4,10 @@
 
 #include "Map.h"
 
+//takes Province referance, prints name, armies, continent, and borders
 void printProvince(Province *pro)
 {
-    printf("name:  %s\narmies: %d\nprovince=%s\n", pro->name, pro->armies, pro->continent->name);
+    printf("name:  %s\narmies: %d\ncontinent=%s\n", pro->name, pro->armies, pro->continent->name);
     for(int i=0; i<8; ++i){
         if (pro->borders[i]!=NULL){
             printf("border[%d]=%s\n", i, pro->borders[i]->name);
@@ -14,6 +15,7 @@ void printProvince(Province *pro)
     }
 }
 
+//takes raw string, parese into name and bonus, creates & returns Continent struct
 //helper fuction for makeMap
 Continent *makeContinent(char *inStr)
 {
@@ -36,7 +38,7 @@ Continent *makeContinent(char *inStr)
     myCont->bonus=atoi(numStr);
     return myCont;
 }
-
+//returns a Province struct, takes name string and a reference to a continent
 //helper fucntion for make map
 Province *makeProvince(char *nameStr, Continent *con)
 {
@@ -68,6 +70,8 @@ Province *makeProvince(char *nameStr, Continent *con)
     return(myProvince);
 }
 
+//Create a valid Map structure by reading from text file
+//TODO This fucntion only creates nodes of map, would be faster to combine txt files and create nodes and edges in one function
 Map *readMapFromTxt(char *fName){
     //read in maps from file
     FILE * f = (FILE *)fopen(fName, "r");
@@ -138,19 +142,24 @@ Map *readMapFromTxt(char *fName){
     return myMap; 
 }
 
-//read file that specifies 
+//function takes Map referance and name of a text file, reads file and parses edge information, connects all verticies
 //TODO file assume all data is valid, add checks for invalid data
-void populateMapVertices(Map *myMap, char *fileName)
+void populateMapEdges(Map *myMap, char *fileName)
 {
+    //buffer for reading file
     char buffer[256];
+    //buffers for province names
     char pro0Name[128];
     char pro1Name[128];
+    //startPos & endPos track positions in the file
     int startPos;
     int endPos;
+    //referance varriables for the two provinces that are too be connected
     Province *pro1;
     Province *pro0;
 
     FILE *f = fopen(fileName, "r");        
+    //iterate over file by line
     while(fgets(buffer, 256, f)!=NULL){
         pro0=NULL;
         pro1=NULL;
@@ -169,6 +178,7 @@ void populateMapVertices(Map *myMap, char *fileName)
         }
 //    printf("%s, %s\n",pro1Name, pro1Name);
         //find names in myMap->provinces
+        //TODO currently uses linear search, faster algorithm could be used
         for(int i=0; i<myMap->numPros;++i){
             if(strcmp(myMap->provinces[i]->name, pro0Name)==0){
                 pro0=myMap->provinces[i]; 
@@ -190,6 +200,7 @@ void populateMapVertices(Map *myMap, char *fileName)
     return;
 }
 
+//frees all memory dynamically alocated by Map
 void clearMap(Map *myMap){
     //free continents
     for(int i=0;i<myMap->numCons;++i){
