@@ -189,3 +189,24 @@ void populateMapVertices(Map *myMap, char *fileName)
     fclose(f);
     return;
 }
+
+void clearMap(Map *myMap){
+    //free continents
+    for(int i=0;i<myMap->numCons;++i){
+        //free province name, (Not sure why I dynamically allocated it in the first place)
+        free(myMap->continents[i]->name);
+        free(myMap->continents[i]);
+    }
+    //free provinces
+    for(int i=0;i<myMap->numPros;++i){
+        //free province name, still not sure why i didn't pre-alocate
+        free(myMap->provinces[i]->name);
+        free(myMap->provinces[i]);
+    }
+    //free map
+    free(myMap->continents);
+    free(myMap->provinces);
+    free(myMap);
+    myMap=NULL;
+    return;
+}

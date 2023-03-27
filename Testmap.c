@@ -20,5 +20,6 @@ int main(void) {
     Map* testMap = readMapFromTxt("MapFiles/Map0Node.txt");
     populateMapVertices(testMap, "MapFiles/Map0Vertex.txt");
     for(int i =0;i<testMap->numPros; ++i){printProvince(testMap->provinces[i]);}
+    clearMap(testMap);
     return 0;
 }
